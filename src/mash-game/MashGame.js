@@ -20,18 +20,20 @@ function MashGame() {
     const excludeList = useRef([]);
     const [score, setScore] = useState(0);
     const incrementScore = () => setScore(score + 1);
-    const [msg, setMsg] = useState("");
-    const buttonClickedOnIndex = ( text ) => setMsg(text);
     const [activateIndex, setActivateIndex] = useState();
+    const changeIndex = (shouldClear) => {
+                    if(shouldClear){
+                        setActivateIndex(null);
+                        return;
+                    }
+                    let actualList = [...Array(rows * cols).keys()].filter(e => !excludeList.current.includes(e));
+                    let randomNumber = Math.floor(Math.random() * actualList.length);
+                    setActivateIndex(actualList[randomNumber]);
+    }
     useEffect(() => {
         const interval = setInterval(()=>{
-            console.log("list is : ", excludeList.current)
-            let actualList = [...Array(rows * cols).keys()].filter(e => !excludeList.current.includes(e));
-            console.log("actual list is", actualList);
-            let randomNumber = Math.floor(Math.random() * actualList.length);
-            console.log("random number is :", actualList[randomNumber])
-            setActivateIndex(actualList[randomNumber]);
-        },500)
+            changeIndex();
+        },300)
         return () => clearInterval(interval);
     }, [])
     const boardRows = ([...new Array(rows)]).map((e , i)=> 
@@ -40,14 +42,14 @@ function MashGame() {
         activateIndex={activateIndex} 
         rowIndex={i}
         incrementScore={incrementScore}
-        buttonClickedOnIndex={buttonClickedOnIndex}
+        changeIndex={changeIndex}
         excludeList={excludeList}
         >
         </CubesRow>);
 
     return (
         <div className="MainContent">
-            <div> Score is : {msg}</div>
+            <div> Score is : {score}</div>
             <div className="Board">
                 {boardRows}
             </div>
@@ -63,7 +65,7 @@ function CubesRow(props) {
             activateIndex={props.activateIndex}
             index={props.rowIndex * cols + i} 
             incrementScore={props.incrementScore} 
-            buttonClickedOnIndex={props.buttonClickedOnIndex}
+            changeIndex={props.changeIndex}
             excludeList={props.excludeList}
             >
             </Cube>)}
@@ -72,29 +74,39 @@ function CubesRow(props) {
 }
 
 function Cube(props) {
-    const [text, setText] = useState(buttonText);
-    const internalIsActive = useRef(false);
-    const isActive = props.activateIndex === props.index
+    const [text, setText] = useState('');
+    const [internalIsActive , setInternalIsActive] = useState(false);
+    const isActive = props.activateIndex === props.index;
 
-
+    let timeoutRef = useRef(null);
     useEffect(() => {
         if(isActive){
-            internalIsActive.current = true;
+            setText(buttonText);
+            setInternalIsActive(true);
             props.excludeList.current.push(props.index);
-            const t = setTimeout(() => {
-                internalIsActive.current = false;
-                console.log("activating set Timeout")
+            timeoutRef.current = setTimeout(() => {
+                setInternalIsActive(false);
+                setText('');
                 props.excludeList.current = [...(props.excludeList.current.filter(e => !(e === props.index)))];
-            }, 2000);
+            }, 900);
         }
     })
     return (
         <div 
-        className={internalIsActive.current ? 'CubeMashable Cube' : 'Cube'}
-        onClick={() => {props.incrementScore(); props.buttonClickedOnIndex(props.index)}} 
-        onMouseDown={() => {setText(clickedButtonText)}}
-        onMouseUp={() => {setText(buttonText)}}
-        onMouseOut={() => {setText(buttonText)}}>
+        className={internalIsActive ? 'CubeMashable Cube' : 'Cube'}
+        onClick={() => { 
+            if(internalIsActive){
+                clearTimeout(timeoutRef.current);
+                setText('');
+                setInternalIsActive(false);
+                props.changeIndex(true);
+                props.excludeList.current = [...(props.excludeList.current.filter(e => !(e === props.index)))];
+                props.incrementScore();
+            }
+            }} 
+        onMouseDown={() => {setText(internalIsActive ? clickedButtonText : '')}}
+        onMouseUp={() => {setText(internalIsActive ? buttonText : '')}}
+        onMouseOut={() => {setText(internalIsActive ? buttonText : '')}}>
             {text}
         </div>);
 }

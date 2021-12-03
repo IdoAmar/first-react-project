@@ -1,11 +1,11 @@
 import './MashGameMenu.css'
 import React, { useState } from 'react';
-import  MashGameCore from '../mash-game-core/MashGameCore'
+import MashGameCore from '../mash-game-core/MashGameCore'
 
 function MashGameMenu() {
     const [difficulty, setDifficulty] = useState();
     const [boardSize, setBoardSize] = useState();
-    const backToMenu = () => {setDifficulty(undefined); setBoardSize(undefined)}
+    const backToMenu = () => { setDifficulty(undefined); setBoardSize(undefined) }
     console.log("arrived at menu", difficulty, boardSize)
     return (difficulty === undefined ? <SelectDifficulty setDifficulty={setDifficulty}></SelectDifficulty> :
         boardSize === undefined ? <SelectBoardSize setBoardSize={setBoardSize}></SelectBoardSize> :
@@ -13,6 +13,7 @@ function MashGameMenu() {
 }
 function SelectDifficulty(props) {
     return <div className='ButtonsContainer'>
+        <h2 className='SelectionTitle'> Select difficulty </h2>
         <button className='MenuButton' onClick={() => props.setDifficulty('easy')}>Easy</button>
         <button className='MenuButton' onClick={() => props.setDifficulty('normal')}>Medium</button>
         <button className='MenuButton' onClick={() => props.setDifficulty('hard')}>Hard</button>
@@ -21,6 +22,7 @@ function SelectDifficulty(props) {
 
 function SelectBoardSize(props) {
     return <div className='ButtonsContainer'>
+        <h2 className='SelectionTitle'> Select board size </h2>
         <button className='MenuButton' onClick={() => props.setBoardSize('small')}>Small</button>
         <button className='MenuButton' onClick={() => props.setBoardSize('large')}>Large</button>
     </div>

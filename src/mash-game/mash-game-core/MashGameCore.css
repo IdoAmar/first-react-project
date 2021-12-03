@@ -39,3 +39,14 @@
     background-color:violet;
     border: 1px solid  blueviolet;
 }
+
+.ButtonsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.MenuButton{
+    font-size: 30px;
+    font-weight: 100;
+}

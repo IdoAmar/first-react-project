@@ -9,3 +9,21 @@ body , html , #root{
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+body{
+    background: #E9E9E9;
+}
+button{
+    outline: none;
+    border: none;
+    padding-inline: 5px;
+    padding-block: 5px;
+    background-color: rgb(176, 252, 227);
+    border-radius: 3px;
+    box-shadow: 1px 2px 5px 0px #999999
+}
+button:hover{
+    filter: brightness(1.05);
+    transform: translatey(-2px);
+    box-shadow: 1px 4px 9px 0px #AAAAAA;
+    transition: 150ms;
+} 

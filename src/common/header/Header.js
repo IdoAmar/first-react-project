@@ -1,8 +1,8 @@
 import './Header.css';
-function Header(){
+function Header({text}){
     return (
         <div className="Header">
-            Mash Game
+            {text}
         </div>
     )
 }

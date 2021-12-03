@@ -34,16 +34,18 @@ function MashGameCore(props) {
     }, [])
 
     const boardRows = ([...new Array(boardSize)]).map((e, i) =>
-        <CubesRow
-            key={i}
-            rowIndex={i}
-            excludeList={excludeList}
-            setGameState={setGameState}
-            gameState={gameState}
-            vanishInterval={difficulty.vanishInterval}
-            boardSize={boardSize}
-        >
-        </CubesRow>);
+         (<div key={'CubeRow_' + i} className="CubeRow">
+            {([...new Array(boardSize)]).map((e, j) =>
+                <Cube 
+                    key={'CubeRow_' + i * boardSize + j}
+                    index={i * boardSize + j}
+                    excludeList={excludeList}
+                    setGameState={setGameState}
+                    gameState={gameState}
+                    vanishInterval={difficulty.vanishInterval}
+                >
+                </Cube>)}
+        </div>));
 
     return (
         <div className="MainContent">
@@ -62,6 +64,7 @@ function MashGameCore(props) {
         </div>
     );
 }
+
 function DisplayScoreAndRetry(props) {
     return (
         <div className='ButtonsContainer'>
@@ -69,22 +72,6 @@ function DisplayScoreAndRetry(props) {
             <button className='MenuButton' onClick={props.resetGame}> Retry ? </button>
             <button className='MenuButton' onClick={props.backToMenu}> Back to main menu</button>
         </div>)
-}
-
-function CubesRow(props) {
-    return (
-        <div className="CubeRow">
-            {([...new Array(props.boardSize)]).map((e, i) =>
-                <Cube key={props.rowIndex * props.boardSize + i}
-                    index={props.rowIndex * props.boardSize + i}
-                    excludeList={props.excludeList}
-                    setGameState={props.setGameState}
-                    gameState={props.gameState}
-                    vanishInterval={props.vanishInterval}
-                >
-                </Cube>)}
-        </div>
-    );
 }
 
 function Cube(props) {

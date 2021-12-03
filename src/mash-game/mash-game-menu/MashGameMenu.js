@@ -6,7 +6,6 @@ function MashGameMenu() {
     const [difficulty, setDifficulty] = useState();
     const [boardSize, setBoardSize] = useState();
     const backToMenu = () => { setDifficulty(undefined); setBoardSize(undefined) }
-    console.log("arrived at menu", difficulty, boardSize)
     return (difficulty === undefined ? <SelectDifficulty setDifficulty={setDifficulty}></SelectDifficulty> :
         boardSize === undefined ? <SelectBoardSize setBoardSize={setBoardSize}></SelectBoardSize> :
             <MashGameCore difficulty={difficulty} boardSize={boardSize} backToMenu={backToMenu}></MashGameCore>);
